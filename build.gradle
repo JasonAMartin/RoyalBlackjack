@@ -1,0 +1,12 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+version = '0.2'
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.14'
+}
+
+mainClassName = 'com.jasonamartin.royalblackjack.RoyalBlackjack'
