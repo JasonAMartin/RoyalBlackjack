@@ -3,23 +3,8 @@ package com.jasonamartin.royalblackjack;
 /*
  * Blackjack 0.2 Jason A. Martin
  *
- * Currently in console version.
- * Last updates:
- * Royal Match added. Pays 2-1 for regular suit match and 15-1 for King/Queen match
- * Fixed issue with hands pushing
- * Added name
- *
- * To Do:
- * Add ability to double down
- * Add ability to split hand
- * Add ability to surrender
- * Clean up code for easier functionality
- * - disable all the println
- * start building interface
- *
- * Defects:
- * 1. user can bet unlimited money for Royal Match
- * 2. If user bets more than they have for hand, it doesn't let them know the bet failed.
+ * Features Coming: /docs/Development.md
+ * Known Defects: /docs/Defects.md
  *
  */
 
@@ -28,12 +13,9 @@ import java.util.InputMismatchException;
 
 public class RoyalBlackjack {
 
-
-
     static int gameStatus=1;
 
     public static void main(String[] args) {
-        // TODO Auto-generated method stub
 
         Scanner in = new Scanner(System.in);
         int myWager;
