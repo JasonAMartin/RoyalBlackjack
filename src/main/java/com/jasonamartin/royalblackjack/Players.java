@@ -13,14 +13,13 @@ public class Players {
     private int currentRoyalMatchWager;
     private int startingCapital = 1000;
 
+    public enum MoneyTransactionTypes {
+        ADD,
+        SUBTRACT
+    }
 
     public void setHandValue (String a) {
-
         char cardCheck = a.charAt(1);
-
-
-        System.out.println ("You sent me : " +cardCheck);
-
         //reset value
         if (a.equalsIgnoreCase("reset")){
             handValue=0;
@@ -31,11 +30,7 @@ public class Players {
             System.out.println("Aces deducted. Value is now: "+handValue);
         }
 
-        //System.out.println ("Starting HV debug....current value: " +handValue);
-
         switch (a.charAt(1)){
-
-
             case '1':
                 handValue=handValue+10;
                 break;
@@ -80,30 +75,27 @@ public class Players {
                 break;
 
         }
-
-
     }
 
     public int getHandValue (){
         return handValue;
     }
 
-    public void setGameStatus (int b) {
-
-        gameStatus=b;
-    }
+    public void setGameStatus (int b) { gameStatus=b; }
 
     public int getGameStatus (){
         return gameStatus;
     }
 
 
-    public void setBankRoll (int c, char moneyResult) {
-        // moneyResult a = add money
-        // moneyResult s = subtract money
-
-        if (moneyResult=='a') bankRoll = bankRoll + c;
-        if (moneyResult=='s') bankRoll = bankRoll - c;
+    public void setBankRoll (int money, MoneyTransactionTypes transaction) {
+        switch (transaction) {
+            case ADD:
+                bankRoll += money;
+                break;
+            case SUBTRACT:
+                bankRoll -= money;
+        }
     }
 
 
