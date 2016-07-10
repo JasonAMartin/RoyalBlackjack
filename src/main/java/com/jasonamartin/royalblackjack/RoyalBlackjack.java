@@ -11,6 +11,7 @@ package com.jasonamartin.royalblackjack;
 import java.util.Scanner;
 import java.util.InputMismatchException;
 import com.jasonamartin.royalblackjack.GameOperations.RoyalMatchStates;
+import com.jasonamartin.royalblackjack.Players.MoneyTransactionTypes;
 
 public class RoyalBlackjack {
 
@@ -25,6 +26,8 @@ public class RoyalBlackjack {
         CardDeck deckOfCards = new CardDeck();
         int insuranceCheck = 0;
         RoyalMatchStates statusRoyalMatch;
+        MoneyTransactionTypes addMoney = MoneyTransactionTypes.ADD;
+        MoneyTransactionTypes deductMoney = MoneyTransactionTypes.SUBTRACT;
         // create player
         Players thePlayer = new Players();
 
@@ -34,7 +37,7 @@ public class RoyalBlackjack {
 
         // setup starting bankRoll
 
-        thePlayer.setBankRoll(thePlayer.getStartingCapital(), 'a');
+        thePlayer.setBankRoll(thePlayer.getStartingCapital(), addMoney);
 
         // setup gamestatus = 1 for new game
 
@@ -122,16 +125,16 @@ public class RoyalBlackjack {
 
             switch (statusRoyalMatch) {
                 case NORMAL:
-                    thePlayer.setBankRoll(thePlayer.getRoyalMatchWager()*2, 'a');
+                    thePlayer.setBankRoll(thePlayer.getRoyalMatchWager()*2, addMoney);
                     System.out.println ("I just added $" + thePlayer.getRoyalMatchWager()*2+" to your bank account!");
                     break;
                 case ROYAL:
-                    thePlayer.setBankRoll(thePlayer.getRoyalMatchWager()*15, 'a');
+                    thePlayer.setBankRoll(thePlayer.getRoyalMatchWager()*15, addMoney);
                     System.out.println ("I just added $" + thePlayer.getRoyalMatchWager()*15+" to your bank account!");
                     break;
                 case NONE:
                     if(thePlayer.getRoyalMatchWager()>0){
-                        thePlayer.setBankRoll(thePlayer.getRoyalMatchWager(), 's');
+                        thePlayer.setBankRoll(thePlayer.getRoyalMatchWager(), deductMoney);
                         System.out.println ("Oh well, easy come, easy go. You lost $" +thePlayer.getRoyalMatchWager()+" playing the Royal Match.");
                     }else{
                         //player didn't wager on the Royal Match
@@ -196,7 +199,7 @@ public class RoyalBlackjack {
 
                         }else{
                             System.out.println ("com.jasonamartin.royalblackjack.Dealer didn't have Blackjack. You lose $"+thePlayer.getCurrentWager()/2);
-                            thePlayer.setBankRoll(thePlayer.getCurrentWager()/2, 's');
+                            thePlayer.setBankRoll(thePlayer.getCurrentWager()/2, deductMoney);
                         }
 
                     }else{
@@ -330,7 +333,7 @@ public class RoyalBlackjack {
                 }else{
                     //player didn't take insurance
                     System.out.println ("You should have taken insurance. Sorry.");
-                    thePlayer.setBankRoll(thePlayer.getCurrentWager(),'s');
+                    thePlayer.setBankRoll(thePlayer.getCurrentWager(),deductMoney);
                 }
 
 
@@ -339,26 +342,26 @@ public class RoyalBlackjack {
 
                 if(thePlayer.getHandValue()>21){
                     //player busted out
-                    thePlayer.setBankRoll(thePlayer.getCurrentWager(),'s');
+                    thePlayer.setBankRoll(thePlayer.getCurrentWager(), deductMoney);
                     System.out.println ("You have LOST $"+thePlayer.getCurrentWager());
                 }else{
                     //check to see who won
 
                     if(theDealer.getHandValue()>21){
                         //dealer bust
-                        thePlayer.setBankRoll(thePlayer.getCurrentWager(),'a');
+                        thePlayer.setBankRoll(thePlayer.getCurrentWager(), addMoney);
                         System.out.println("WINNER! You've won $"+thePlayer.getCurrentWager());
                     }else{
                         //dealer still in
 
                         if (thePlayer.getHandValue()>theDealer.getHandValue()){
                             //player wins
-                            thePlayer.setBankRoll(thePlayer.getCurrentWager(),'a');
+                            thePlayer.setBankRoll(thePlayer.getCurrentWager(), addMoney);
                             System.out.println("WINNER! You've beaten the dealer and won $"+thePlayer.getCurrentWager());
 
                         }else if (thePlayer.getHandValue()<theDealer.getHandValue()){
                             //dealer wins
-                            thePlayer.setBankRoll(thePlayer.getCurrentWager(),'s');
+                            thePlayer.setBankRoll(thePlayer.getCurrentWager(),deductMoney);
                             System.out.println ("com.jasonamartin.royalblackjack.Dealer smoked you. You have LOST $"+thePlayer.getCurrentWager());
                         }else{
                             //push
