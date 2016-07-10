@@ -110,7 +110,7 @@ public class GameOperations {
         while (benchmark){
             System.out.println ("Hey partner. Please enter a name for yourself.");
 
-            hasName = in.next();
+            hasName = in.nextLine();
 
             try {
 
@@ -126,27 +126,19 @@ public class GameOperations {
 
             }
         }
-
-
-
-
-
         return hasName;
     }
 
 
-    public int RequestRoyalMatch (){
+    public int RequestRoyalMatch (int bankroll, int currentWager){
         int wantsRoyalMatch=0;
         boolean benchmark = true;
         Scanner in = new Scanner(System.in);
         int userEntry;
 
         while (benchmark){
-            System.out.println ("Would you like to wager on the Royal Match? Enter zero (0) if you don't. Otherwise, enter the wager amount without the dollar sign.");
+            System.out.println (String.format("Would you like to wager on the Royal Match? \nEnter zero (0) if you don't. Otherwise, enter the wager amount without the dollar sign (example: %d).", bankroll - currentWager));
             System.out.println ("A normal Royal Match win current pays 2:1 and royal pays 15:1!");
-
-
-
             try {
                 userEntry=Integer.parseInt(in.nextLine());
                 if(userEntry==0){
@@ -154,9 +146,14 @@ public class GameOperations {
                     System.out.println ("Ok, maybe you'll try Royal Match next time . . .");
                     benchmark=false;
                 }else{
-                    //player wants RoyalMatch, so return dollar amount.
-                    benchmark=false;
-                    wantsRoyalMatch=userEntry;
+                    //player wants RoyalMatch. If desired bet is under total bankroll by at least $1, place bet.
+                    if (userEntry <= bankroll) {
+                        benchmark = false;
+                        wantsRoyalMatch = userEntry;
+                    } else {
+                        benchmark = true;
+                        System.out.print(String.format("You can't bet more than you have. \nYou have $%d. \n", bankroll - currentWager));
+                    }
                 }
             }
             catch (InputMismatchException e){
@@ -167,9 +164,6 @@ public class GameOperations {
 
             }
         }
-
-
-
         return wantsRoyalMatch;
     }
 
