@@ -19,6 +19,23 @@ public class GameOperations {
         NONE
     }
 
+    public enum Payouts {
+        NORMAL (1),
+        BLACKJACK (1.5f),
+        NORMALROYALMATCH (2.5f),
+        ROYALMATCH (25),
+        CROWN (1000);
+
+        private final float pay;
+
+        Payouts(float pay) {
+            this.pay = pay;
+        }
+
+        public float pay() { return pay; }
+
+    }
+
     public enum Confirmations {
         YES,
         NO
