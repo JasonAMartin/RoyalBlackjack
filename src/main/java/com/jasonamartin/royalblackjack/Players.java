@@ -1,6 +1,6 @@
 package com.jasonamartin.royalblackjack;
 
-public class Players {
+class Players {
 
     private int handValue;
     private int gameStatus;
@@ -11,84 +11,36 @@ public class Players {
     private int hasInsurance;
     private String myName;
     private int currentRoyalMatchWager;
-    private int startingCapital = 1000;
 
-    public enum MoneyTransactionTypes {
+    enum MoneyTransactionTypes {
         ADD,
         SUBTRACT
     }
 
-    public void setHandValue (String a) {
-        char cardCheck = a.charAt(1);
-        //reset value
-        if (a.equalsIgnoreCase("reset")){
-            handValue=0;
-        }
-        if (a.equalsIgnoreCase("xx10")){
-            System.out.println("ACES XXXXX. Value was: "+handValue);
-            handValue=handValue-10;
-            System.out.println("Aces deducted. Value is now: "+handValue);
+    void setHandValue (String hand) {
+        if (hand.equalsIgnoreCase("xx10")){
+            handValue -= 10;
         }
 
-        switch (a.charAt(1)){
-            case '1':
-                handValue=handValue+10;
-                break;
-            case 'j':
-                handValue=handValue+10;
-                break;
-            case 'q':
-                handValue=handValue+10;
-                break;
-            case 'k':
-                handValue=handValue+10;
-                break;
-            case 'a':
-                handValue=handValue+11;
-                hasAces++;
-                break;
-            case '2':
-                handValue=handValue+2;
-                break;
-            case '3':
-                handValue=handValue+3;
-                break;
-            case '4':
-                handValue=handValue+4;
-                break;
-            case '5':
-                handValue=handValue+5;
-                break;
-            case '6':
-                handValue=handValue+6;
-                break;
-            case '7':
-                handValue=handValue+7;
-                break;
-            case '8':
-                handValue=handValue+8;
-                break;
-            case '9':
-                handValue=handValue+9;
-                break;
-            default:
-                break;
+        handValue += CardDeck.GetHandValue(hand);
 
-        }
+        if (hand.charAt(1) == 'a') { hasAces++; }
     }
 
-    public int getHandValue (){
+    void resetHandValue ()  { handValue = 0; }
+
+    int getHandValue (){
         return handValue;
     }
 
-    public void setGameStatus (int b) { gameStatus=b; }
+    void setGameStatus (int b) { gameStatus=b; }
 
-    public int getGameStatus (){
+    int getGameStatus (){
         return gameStatus;
     }
 
 
-    public void setBankRoll (int money, MoneyTransactionTypes transaction) {
+    void setBankRoll (int money, MoneyTransactionTypes transaction) {
         switch (transaction) {
             case ADD:
                 bankRoll += money;
@@ -99,38 +51,38 @@ public class Players {
     }
 
 
-    public int getBankRoll () {
+    int getBankRoll () {
         return bankRoll;
     }
 
-    public void setCurrentWager (int w){
+    void setCurrentWager (int w){
         currentWager = w;
     }
 
-    public int getCurrentWager (){
+    int getCurrentWager (){
         return currentWager;
     }
-    public int getAces () {
+    int getAces () {
         return hasAces;
     }
 
-    public void setAces (){
+    void setAces (){
         System.out.println ("You HAD "+ hasAces + " ace(S)");
         hasAces=hasAces-1;
         System.out.println ("You now have: " + hasAces + " aces");
     }
-    public int getBlackjack () {
+    int getBlackjack () {
         return hasBlackjack;
     }
 
-    public int hasInsurance (){
+    int hasInsurance (){
         return hasInsurance;
     }
-    public void setBlackjack (int i){
+    void setBlackjack (int i){
         hasInsurance=i;
         hasBlackjack = 1;
     }
-    public void resetBlackjack (){
+    void resetBlackjack (){
         hasBlackjack=0;
         hasInsurance=0;
         hasAces=0;
@@ -138,20 +90,20 @@ public class Players {
 
     }
 
-    public void setMyName (String name){
+    void setMyName (String name){
         myName = name;
     }
 
-    public String getMyName (){
+    String getMyName (){
         return myName;
     }
-    public void setRoyalMatchWager (int cash){
+    void setRoyalMatchWager (int cash){
         currentRoyalMatchWager = cash;
     }
 
-    public int getRoyalMatchWager (){
+    int getRoyalMatchWager (){
         return currentRoyalMatchWager;
     }
 
-    public int getStartingCapital() { return startingCapital; }
+    int getStartingCapital() { return 5000; }
 }
