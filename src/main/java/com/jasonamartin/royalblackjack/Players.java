@@ -11,7 +11,7 @@ public class Players {
     private int hasInsurance;
     private String myName;
     private int currentRoyalMatchWager;
-
+    private int startingCapital = 1000;
 
 
     public void setHandValue (String a) {
@@ -160,4 +160,6 @@ public class Players {
     public int getRoyalMatchWager (){
         return currentRoyalMatchWager;
     }
+
+    public int getStartingCapital() { return startingCapital; }
 }
