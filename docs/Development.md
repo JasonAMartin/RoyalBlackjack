@@ -9,3 +9,4 @@
  - [ ] start building interface
  - [ ] add testing
  - [ ] move set wager sequence out of main class and into GameOperations
+ - [x] moved logic for determining a player's hand count out of Players class and into CardDeck class.
