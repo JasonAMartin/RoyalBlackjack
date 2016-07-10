@@ -108,8 +108,8 @@ public class RoyalBlackjack {
             deckOfCards.ShuffleCards(4);
 
             //3.1 reset player and dealer hand values
-            thePlayer.setHandValue("reset");
-            theDealer.setHandValue("reset");
+            thePlayer.resetHandValue();
+            theDealer.resetHandValue();
 
 
             //4. deal cards, update hand values, show dealer's up card.
