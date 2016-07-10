@@ -40,7 +40,7 @@ class Players {
     }
 
 
-    void setBankRoll (int money, MoneyTransactionTypes transaction) {
+    void setBankRoll (float money, MoneyTransactionTypes transaction) {
         switch (transaction) {
             case ADD:
                 bankRoll += money;
@@ -101,7 +101,7 @@ class Players {
         currentRoyalMatchWager = cash;
     }
 
-    int getRoyalMatchWager (){
+    float getRoyalMatchWager (){
         return currentRoyalMatchWager;
     }
 
