@@ -3,7 +3,7 @@ package com.jasonamartin.royalblackjack;
 class Players {
 
     private int handValue;
-    private int gameStatus;
+    private GameStatus gameStatus;
     private int bankRoll;
     private int currentWager;
     private int hasAces;
@@ -15,6 +15,12 @@ class Players {
     enum MoneyTransactionTypes {
         ADD,
         SUBTRACT
+    }
+
+    enum GameStatus {
+        PLAYING,
+        QUIT,
+        BLACKJACK
     }
 
     void setHandValue (String hand) {
@@ -29,15 +35,11 @@ class Players {
 
     void resetHandValue ()  { handValue = 0; }
 
-    int getHandValue (){
-        return handValue;
-    }
+    int getHandValue () { return handValue; }
 
-    void setGameStatus (int b) { gameStatus=b; }
+    void setGameStatus (GameStatus status) { gameStatus = status; }
 
-    int getGameStatus (){
-        return gameStatus;
-    }
+    GameStatus getGameStatus () { return gameStatus; }
 
 
     void setBankRoll (float money, MoneyTransactionTypes transaction) {
@@ -50,60 +52,39 @@ class Players {
         }
     }
 
+    int getBankRoll () { return bankRoll; }
 
-    int getBankRoll () {
-        return bankRoll;
-    }
+    void setCurrentWager (int wager) { currentWager = wager; }
 
-    void setCurrentWager (int w){
-        currentWager = w;
-    }
+    int getCurrentWager (){ return currentWager; }
 
-    int getCurrentWager (){
-        return currentWager;
-    }
-    int getAces () {
-        return hasAces;
-    }
+    int getAces () { return hasAces; }
 
-    void setAces (){
-        System.out.println ("You HAD "+ hasAces + " ace(S)");
-        hasAces=hasAces-1;
-        System.out.println ("You now have: " + hasAces + " aces");
-    }
-    int getBlackjack () {
-        return hasBlackjack;
-    }
+    void setAces (){ hasAces -= 1; }
 
-    int hasInsurance (){
-        return hasInsurance;
-    }
-    void setBlackjack (int i){
-        hasInsurance=i;
+    int getBlackjack () { return hasBlackjack; }
+
+    int hasInsurance (){ return hasInsurance; }
+
+    void setBlackjack (int insurance){
+        hasInsurance=insurance;
         hasBlackjack = 1;
     }
+
     void resetBlackjack (){
         hasBlackjack=0;
         hasInsurance=0;
         hasAces=0;
         currentRoyalMatchWager=0;
-
     }
 
-    void setMyName (String name){
-        myName = name;
-    }
+    void setMyName (String name){ myName = name; }
 
-    String getMyName (){
-        return myName;
-    }
-    void setRoyalMatchWager (int cash){
-        currentRoyalMatchWager = cash;
-    }
+    String getMyName (){ return myName; }
 
-    float getRoyalMatchWager (){
-        return currentRoyalMatchWager;
-    }
+    void setRoyalMatchWager (int cash){ currentRoyalMatchWager = cash; }
+
+    float getRoyalMatchWager (){ return currentRoyalMatchWager; }
 
     int getStartingCapital() { return 5000; }
 }
