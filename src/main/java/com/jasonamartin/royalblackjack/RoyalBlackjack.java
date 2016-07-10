@@ -58,16 +58,18 @@ public class RoyalBlackjack {
 
             //2. ask for wager and verify it's acceptable
 
-            System.out.println ("How much would you like to wager (do not include dollar symbol)? If you'd like to quit, just enter a zero (0).");
             //myWager=in.nextInt();
 
 
             //verify integer is given
 
             //boolean benchmark1 = true;
+
+            // TODO: Move wager dialog to GameOperations.
             while (benchmark1){
 
                 try {
+                    System.out.println ("How much would you like to wager (do not include dollar symbol)? If you'd like to quit, just enter a zero (0).");
                     myWager=Integer.parseInt(in.nextLine());
                     //check to see if player has the cash
                     if (myWager<=thePlayer.getBankRoll()){
@@ -84,7 +86,7 @@ public class RoyalBlackjack {
                     thePlayer.setCurrentWager(myWager);
                 }
                 catch (InputMismatchException e){
-                    //System.out.println ("How much would you like to wager (do not include dollar symbol)?");
+                    // System.out.println ("How much would you like to wager (do not include dollar symbol)?");
                 }
                 catch (NumberFormatException e ){
                     // System.out.println ("How much would you like to wager (do not include dollar symbol)?");
@@ -94,7 +96,7 @@ public class RoyalBlackjack {
 
             //2.5 Check if player wants RoyalMatch
 
-            thePlayer.setRoyalMatchWager(rbjGame.RequestRoyalMatch());
+            thePlayer.setRoyalMatchWager(rbjGame.RequestRoyalMatch(thePlayer.getBankRoll(), thePlayer.getCurrentWager()));
 
 
 
