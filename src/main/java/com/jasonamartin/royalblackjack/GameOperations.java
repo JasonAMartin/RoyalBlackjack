@@ -2,8 +2,7 @@ package com.jasonamartin.royalblackjack;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
-
-
+import java.util.StringJoiner;
 
 public class GameOperations {
 
@@ -13,6 +12,12 @@ public class GameOperations {
         Stand,
         Surrender
     };
+
+    public enum RoyalMatchStates {
+        ROYAL,
+        NORMAL,
+        NONE
+    }
 
     public enum Confirmations {
         YES,
@@ -97,7 +102,7 @@ public class GameOperations {
     }
 
     public String RequestName (){
-        String hasName="";
+        String hasName = "";
         boolean benchmark = true;
         Scanner in = new Scanner(System.in);
 
@@ -168,45 +173,22 @@ public class GameOperations {
         return wantsRoyalMatch;
     }
 
-    public String RoyalMatchCheck (String card1, String card2){
-        String matchResult="";
-        char suit1;
-        char suit2;
-        char cardType1;
-        char cardType2;
-        int royalMatch=0;
-
-        suit1 = card1.charAt(0);
-        suit2 = card2.charAt(0);
-        cardType1 = card1.charAt(1);
-        cardType2 = card2.charAt(1);
-
-        //check for king/queen matches=2 means
-        if(cardType1=='q' && cardType2=='k') royalMatch=1;
-        if(cardType1=='k' && cardType2=='q') royalMatch=1;
-
-        if(suit1==suit2){
-            //is this a ROYAL match (king/queen) or regular match?
-
-            if(royalMatch==1){
-                //it's a Royal!
-                System.out.println("ROYAL MATCH WIN WIN WIN WIN!!!!");
-                matchResult = "royalwin";
-            }else{
-                //nope. Just regular royal match win
-                System.out.println("You won your royal match wager (regular match)");
-                matchResult = "win";
+    public RoyalMatchStates RoyalMatchCheck (String card1, String card2){
+        RoyalMatchStates matchResult;
+        String dealtSet = new StringBuilder().append(card1.charAt(1)).append(card2.charAt(1)).toString();
+        String[] royalMatch = { "kq", "qk" };
+        // If suits are not the same, it's a loss.
+        if (card1.charAt(0) == card2.charAt(0)) {
+            // suit match
+            matchResult = RoyalMatchStates.NORMAL;
+            for (String cardSet : royalMatch) {
+                if (cardSet.equals(dealtSet)){
+                    matchResult = RoyalMatchStates.ROYAL;
+                }
             }
-
-
-
-        }else {
-            System.out.println ("You lost the Royal Match --- hahaha");
-            matchResult= "lose";
+        } else {
+            matchResult = RoyalMatchStates.NONE;
         }
-
-
         return matchResult;
     }
-
 }
