@@ -51,7 +51,7 @@ public class CardDeck {
                 //end card setup
             }
         }
-        System.out.println("CARDS::: " + cardShoe.size() + "\n\n" + cardShoe);
+        // System.out.println("CARDS::: " + cardShoe.size() + "\n\n" + cardShoe);
 
         Collections.shuffle(cardShoe);
     }
