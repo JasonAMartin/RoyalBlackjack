@@ -1,6 +1,6 @@
 # DEVELOPMENT TODO
 
- - [ ] Code cleanup - the old code is full of styling issues for starters.
+ - [ ] Code cleanup - the old code is full of styling issues for starters. **[in progress]**
  - [ ] Add ability to double down
  - [ ] Add ability to split hand
  - [ ] Add ability to surrender
