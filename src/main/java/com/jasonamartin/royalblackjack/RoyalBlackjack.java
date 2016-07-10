@@ -10,6 +10,7 @@ package com.jasonamartin.royalblackjack;
 
 import java.util.Scanner;
 import java.util.InputMismatchException;
+import com.jasonamartin.royalblackjack.GameOperations.RoyalMatchStates;
 
 public class RoyalBlackjack {
 
@@ -20,29 +21,28 @@ public class RoyalBlackjack {
         Scanner in = new Scanner(System.in);
         int myWager;
         String myAction;
-        GameOperations myGame = new GameOperations();
-        CardDeck myCards = new CardDeck();
-        //int checkInput = 0;
-        int insuranceCheck =0;
-        String statusRoyalMatch;
-        //create player
+        GameOperations rbjGame = new GameOperations();
+        CardDeck deckOfCards = new CardDeck();
+        int insuranceCheck = 0;
+        RoyalMatchStates statusRoyalMatch;
+        // create player
         Players thePlayer = new Players();
 
-        //create dealer
+        // create dealer
 
         Dealer theDealer = new Dealer();
 
-        //setup starting bankRoll
+        // setup starting bankRoll
 
-        thePlayer.setBankRoll(5000, 'a');
+        thePlayer.setBankRoll(thePlayer.getStartingCapital(), 'a');
 
-        //setup gamestatus = 1 for new game
+        // setup gamestatus = 1 for new game
 
         thePlayer.setGameStatus(1);
 
-        //get the player's name
+        // get the player's name
 
-        thePlayer.setMyName(myGame.RequestName());
+        thePlayer.setMyName(rbjGame.RequestName());
         System.out.println ("Great. I'll call you "+thePlayer.getMyName());
 
         while (thePlayer.getGameStatus()==1){
@@ -94,13 +94,13 @@ public class RoyalBlackjack {
 
             //2.5 Check if player wants RoyalMatch
 
-            thePlayer.setRoyalMatchWager(myGame.RequestRoyalMatch());
+            thePlayer.setRoyalMatchWager(rbjGame.RequestRoyalMatch());
 
 
 
             //3. call shufflecards to shuffle
 
-            myCards.ShuffleCards(4);
+            deckOfCards.ShuffleCards(4);
 
             //3.1 reset player and dealer hand values
             thePlayer.setHandValue("reset");
@@ -108,47 +108,44 @@ public class RoyalBlackjack {
 
 
             //4. deal cards, update hand values, show dealer's up card.
-            thePlayer.setHandValue(myCards.cardShoe.get(0));
-            thePlayer.setHandValue(myCards.cardShoe.get(2));
+            thePlayer.setHandValue(deckOfCards.cardShoe.get(0));
+            thePlayer.setHandValue(deckOfCards.cardShoe.get(2));
 
 
             //4.1 check if cards match for Royal Match
 
-            statusRoyalMatch = myGame.RoyalMatchCheck(myCards.cardShoe.get(0), myCards.cardShoe.get(2));
+            statusRoyalMatch = rbjGame.RoyalMatchCheck(deckOfCards.cardShoe.get(0), deckOfCards.cardShoe.get(2));
 
             //4.11 add or subtract money
 
-            if(statusRoyalMatch.equalsIgnoreCase("lose")) {
-
-                if(thePlayer.getRoyalMatchWager()>0){
-                    thePlayer.setBankRoll(thePlayer.getRoyalMatchWager(), 's');
-                    System.out.println ("Oh well, easy come, easy go. You lost $" +thePlayer.getRoyalMatchWager()+" playing the Royal Match.");
-                }else{
-                    //player didn't wager on the Royal Match
-                    System.out.println ("Good thing you didn't wager on Royal Match. You would have lost.");
-                }
-
-            }
-
-            if(statusRoyalMatch.equalsIgnoreCase("win")) {
-                //regular royal match win, pays 2x bet
-                thePlayer.setBankRoll(thePlayer.getRoyalMatchWager()*2, 'a');
-                System.out.println ("I just added $" + thePlayer.getRoyalMatchWager()*2+" to your bank account!");
-
-            }
-
-            if(statusRoyalMatch.equalsIgnoreCase("royalwin")) {
-                //Royal Match special King/Queen, pays 15x bet
-                thePlayer.setBankRoll(thePlayer.getRoyalMatchWager()*15, 'a');
-                System.out.println ("I just added $" + thePlayer.getRoyalMatchWager()*15+" to your bank account!");
-
+            switch (statusRoyalMatch) {
+                case NORMAL:
+                    thePlayer.setBankRoll(thePlayer.getRoyalMatchWager()*2, 'a');
+                    System.out.println ("I just added $" + thePlayer.getRoyalMatchWager()*2+" to your bank account!");
+                    break;
+                case ROYAL:
+                    thePlayer.setBankRoll(thePlayer.getRoyalMatchWager()*15, 'a');
+                    System.out.println ("I just added $" + thePlayer.getRoyalMatchWager()*15+" to your bank account!");
+                    break;
+                case NONE:
+                    if(thePlayer.getRoyalMatchWager()>0){
+                        thePlayer.setBankRoll(thePlayer.getRoyalMatchWager(), 's');
+                        System.out.println ("Oh well, easy come, easy go. You lost $" +thePlayer.getRoyalMatchWager()+" playing the Royal Match.");
+                    }else{
+                        //player didn't wager on the Royal Match
+                        System.out.println ("Good thing you didn't wager on Royal Match. You would have lost.");
+                    }
+                    break;
+                default:
+                    System.out.println("error");
+                    break;
             }
 
 
             //4.2 remove cards used
 
-            System.out.println(myCards.cardShoe.get(0));
-            System.out.println (myCards.cardShoe.get(2));
+            System.out.println(deckOfCards.cardShoe.get(0));
+            System.out.println (deckOfCards.cardShoe.get(2));
 
 
 
@@ -160,25 +157,25 @@ public class RoyalBlackjack {
 
             }
 
-            myCards.cardShoe.remove(0);
-            myCards.cardShoe.remove(3);
+            deckOfCards.cardShoe.remove(0);
+            deckOfCards.cardShoe.remove(3);
 
             //dealer stuff here!!
-            theDealer.setHandValue(myCards.cardShoe.get(1));
-            theDealer.setHandValue(myCards.cardShoe.get(3));
+            theDealer.setHandValue(deckOfCards.cardShoe.get(1));
+            theDealer.setHandValue(deckOfCards.cardShoe.get(3));
 
-            System.out.println ("The dealer is showing a " + myCards.cardShoe.get(1));
+            System.out.println ("The dealer is showing a " + deckOfCards.cardShoe.get(1));
 
 
             //is dealer showing ace? If so, insurance option
 
-            if(myCards.cardShoe.get(1).equalsIgnoreCase("da") || myCards.cardShoe.get(1).equalsIgnoreCase("ha") || myCards.cardShoe.get(1).equalsIgnoreCase("ca") || myCards.cardShoe.get(1).equalsIgnoreCase("ca") ) {
+            if(deckOfCards.cardShoe.get(1).equalsIgnoreCase("da") || deckOfCards.cardShoe.get(1).equalsIgnoreCase("ha") || deckOfCards.cardShoe.get(1).equalsIgnoreCase("ca") || deckOfCards.cardShoe.get(1).equalsIgnoreCase("ca") ) {
                 //ace is showing
                 System.out.println ("DEALER ACE!!!****!!!****!!!****!!!***");
                 System.out.println ("Would you like insurance? Type \"yes\" or \"no\"");
 
                 //call insurance question method
-                insuranceCheck= myGame.insuranceOption();
+                insuranceCheck= rbjGame.insuranceOption();
                 //a insuranceStatus=1 is for insurance wanted.
                 if(insuranceCheck==1){
                     //player wants insurance. Check it player has cash for it. If so, proceed. If not, give notice.
@@ -222,13 +219,13 @@ public class RoyalBlackjack {
             }
 
             //remove dealer's cards used
-            myCards.cardShoe.remove(1);
-            myCards.cardShoe.remove(4);
+            deckOfCards.cardShoe.remove(1);
+            deckOfCards.cardShoe.remove(4);
 
             //4.5 if dealer has a 10 showing, see if handvalue is 21. If so, hand over. money lost.
 
 
-            if(myCards.cardShoe.get(1).equalsIgnoreCase("sk") || myCards.cardShoe.get(1).equalsIgnoreCase("sq") || myCards.cardShoe.get(1).equalsIgnoreCase("sj") || myCards.cardShoe.get(1).equalsIgnoreCase("hk") || myCards.cardShoe.get(1).equalsIgnoreCase("hq") || myCards.cardShoe.get(1).equalsIgnoreCase("hj") || myCards.cardShoe.get(1).equalsIgnoreCase("ck") || myCards.cardShoe.get(1).equalsIgnoreCase("cq") || myCards.cardShoe.get(1).equalsIgnoreCase("cj") || myCards.cardShoe.get(1).equalsIgnoreCase("dk") || myCards.cardShoe.get(1).equalsIgnoreCase("dq") || myCards.cardShoe.get(1).equalsIgnoreCase("dj") || myCards.cardShoe.get(1).equalsIgnoreCase("d10") || myCards.cardShoe.get(1).equalsIgnoreCase("h10") || myCards.cardShoe.get(1).equalsIgnoreCase("c10") || myCards.cardShoe.get(1).equalsIgnoreCase("c10") ) {
+            if(deckOfCards.cardShoe.get(1).equalsIgnoreCase("sk") || deckOfCards.cardShoe.get(1).equalsIgnoreCase("sq") || deckOfCards.cardShoe.get(1).equalsIgnoreCase("sj") || deckOfCards.cardShoe.get(1).equalsIgnoreCase("hk") || deckOfCards.cardShoe.get(1).equalsIgnoreCase("hq") || deckOfCards.cardShoe.get(1).equalsIgnoreCase("hj") || deckOfCards.cardShoe.get(1).equalsIgnoreCase("ck") || deckOfCards.cardShoe.get(1).equalsIgnoreCase("cq") || deckOfCards.cardShoe.get(1).equalsIgnoreCase("cj") || deckOfCards.cardShoe.get(1).equalsIgnoreCase("dk") || deckOfCards.cardShoe.get(1).equalsIgnoreCase("dq") || deckOfCards.cardShoe.get(1).equalsIgnoreCase("dj") || deckOfCards.cardShoe.get(1).equalsIgnoreCase("d10") || deckOfCards.cardShoe.get(1).equalsIgnoreCase("h10") || deckOfCards.cardShoe.get(1).equalsIgnoreCase("c10") || deckOfCards.cardShoe.get(1).equalsIgnoreCase("c10") ) {
                 //a 10 or face card is showing!
                 if(theDealer.getHandValue()==21){
                     //dealer has 21 game over. Take cash!
@@ -254,8 +251,8 @@ public class RoyalBlackjack {
                     if (myAction.equalsIgnoreCase("hit")) {
                         //player wants a card
 
-                        thePlayer.setHandValue(myCards.cardShoe.get(0));
-                        myCards.cardShoe.remove(0);
+                        thePlayer.setHandValue(deckOfCards.cardShoe.get(0));
+                        deckOfCards.cardShoe.remove(0);
                         System.out.println ("Your new hand value is: " + thePlayer.getHandValue());
                         if(thePlayer.getHandValue()>21){
 
@@ -302,8 +299,8 @@ public class RoyalBlackjack {
                 while (theDealer.checkAction(theDealer.getHandValue())!=2){
                     System.out.println ("The dealer's action is: " +theDealer.checkAction(theDealer.getHandValue()));
                     //get card
-                    theDealer.setHandValue(myCards.cardShoe.get(0));
-                    myCards.cardShoe.remove(0);
+                    theDealer.setHandValue(deckOfCards.cardShoe.get(0));
+                    deckOfCards.cardShoe.remove(0);
 
 
                 }
