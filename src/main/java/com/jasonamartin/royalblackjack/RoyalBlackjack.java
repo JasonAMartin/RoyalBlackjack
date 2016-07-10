@@ -122,20 +122,22 @@ public class RoyalBlackjack {
             statusRoyalMatch = rbjGame.RoyalMatchCheck(deckOfCards.cardShoe.get(0), deckOfCards.cardShoe.get(2));
 
             //4.11 add or subtract money
-
+            float payout;
             switch (statusRoyalMatch) {
                 case NORMAL:
-                    thePlayer.setBankRoll(thePlayer.getRoyalMatchWager()*2, addMoney);
-                    System.out.println ("I just added $" + thePlayer.getRoyalMatchWager()*2+" to your bank account!");
+                    payout = thePlayer.getRoyalMatchWager() * GameOperations.Payouts.NORMALROYALMATCH.pay();
+                    thePlayer.setBankRoll(payout, addMoney);
+                    System.out.println (String.format("I just added $%d to your bank account!", payout));
                     break;
                 case ROYAL:
-                    thePlayer.setBankRoll(thePlayer.getRoyalMatchWager()*15, addMoney);
-                    System.out.println ("I just added $" + thePlayer.getRoyalMatchWager()*15+" to your bank account!");
+                    payout = thePlayer.getRoyalMatchWager() * GameOperations.Payouts.ROYALMATCH.pay();
+                    thePlayer.setBankRoll(payout, addMoney);
+                    System.out.println (String.format("I just added $%d to your bank account!", payout));
                     break;
                 case NONE:
                     if(thePlayer.getRoyalMatchWager()>0){
                         thePlayer.setBankRoll(thePlayer.getRoyalMatchWager(), deductMoney);
-                        System.out.println ("Oh well, easy come, easy go. You lost $" +thePlayer.getRoyalMatchWager()+" playing the Royal Match.");
+                        System.out.println (String.format("Oh well, easy come, easy go. You lost $%.0f playing the Royal Match.", thePlayer.getRoyalMatchWager()));
                     }else{
                         //player didn't wager on the Royal Match
                         System.out.println ("Good thing you didn't wager on Royal Match. You would have lost.");
@@ -319,7 +321,6 @@ public class RoyalBlackjack {
             }
 
 
-
             //8. Compare hands to see who won and pay up or deduct
 
             //if game ended early due to dealer BJ
@@ -343,7 +344,7 @@ public class RoyalBlackjack {
                 if(thePlayer.getHandValue()>21){
                     //player busted out
                     thePlayer.setBankRoll(thePlayer.getCurrentWager(), deductMoney);
-                    System.out.println ("You have LOST $"+thePlayer.getCurrentWager());
+                    System.out.println ("You have LOST $" + thePlayer.getCurrentWager());
                 }else{
                     //check to see who won
 
@@ -357,12 +358,12 @@ public class RoyalBlackjack {
                         if (thePlayer.getHandValue()>theDealer.getHandValue()){
                             //player wins
                             thePlayer.setBankRoll(thePlayer.getCurrentWager(), addMoney);
-                            System.out.println("WINNER! You've beaten the dealer and won $"+thePlayer.getCurrentWager());
+                            System.out.println("WINNER! You've beaten the dealer and won $" + thePlayer.getCurrentWager());
 
                         }else if (thePlayer.getHandValue()<theDealer.getHandValue()){
                             //dealer wins
                             thePlayer.setBankRoll(thePlayer.getCurrentWager(),deductMoney);
-                            System.out.println ("com.jasonamartin.royalblackjack.Dealer smoked you. You have LOST $"+thePlayer.getCurrentWager());
+                            System.out.println ("Dealer smoked you. You have LOST $" + thePlayer.getCurrentWager());
                         }else{
                             //push
                             System.out.println ("It's a PUSH! No one wins.");
